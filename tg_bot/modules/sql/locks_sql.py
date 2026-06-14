@@ -66,8 +66,6 @@ class Restrictions(BASE):
         return "<Restrictions for %s>" % self.chat_id
 
 
-Permissions.__table__.create(checkfirst=True)
-Restrictions.__table__.create(checkfirst=True)
 
 
 PERM_LOCK = threading.RLock()

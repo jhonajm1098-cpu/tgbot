@@ -15,7 +15,6 @@ class GroupLogs(BASE):
         self.log_channel = str(log_channel)
 
 
-GroupLogs.__table__.create(checkfirst=True)
 
 LOGS_INSERTION_LOCK = threading.RLock()
 
@@ -80,4 +79,6 @@ def __load_log_channels():
         SESSION.close()
 
 
+from tg_bot.modules.sql import create_tables as _create_tables
+_create_tables()
 __load_log_channels()

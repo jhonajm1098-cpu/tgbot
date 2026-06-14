@@ -1,14 +1,14 @@
 import threading
 from typing import Union
 
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import BigInteger, Column, Integer, String, Boolean
 
 from tg_bot.modules.sql import SESSION, BASE
 
 
 class ReportingUserSettings(BASE):
     __tablename__ = "user_report_settings"
-    user_id = Column(Integer, primary_key=True)
+    user_id = Column(BigInteger, primary_key=True)
     should_report = Column(Boolean, default=True)
 
     def __init__(self, user_id):
@@ -30,8 +30,6 @@ class ReportingChatSettings(BASE):
         return "<Chat report settings ({})>".format(self.chat_id)
 
 
-ReportingUserSettings.__table__.create(checkfirst=True)
-ReportingChatSettings.__table__.create(checkfirst=True)
 
 CHAT_LOCK = threading.RLock()
 USER_LOCK = threading.RLock()

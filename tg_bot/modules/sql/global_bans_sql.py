@@ -1,13 +1,13 @@
 import threading
 
-from sqlalchemy import Column, UnicodeText, Integer, String, Boolean
+from sqlalchemy import BigInteger, Column, UnicodeText, Integer, String, Boolean
 
 from tg_bot.modules.sql import BASE, SESSION
 
 
 class GloballyBannedUsers(BASE):
     __tablename__ = "gbans"
-    user_id = Column(Integer, primary_key=True)
+    user_id = Column(BigInteger, primary_key=True)
     name = Column(UnicodeText, nullable=False)
     reason = Column(UnicodeText)
 
@@ -38,8 +38,6 @@ class GbanSettings(BASE):
         return "<Gban setting {} ({})>".format(self.chat_id, self.setting)
 
 
-GloballyBannedUsers.__table__.create(checkfirst=True)
-GbanSettings.__table__.create(checkfirst=True)
 
 GBANNED_USERS_LOCK = threading.RLock()
 GBAN_SETTING_LOCK = threading.RLock()
@@ -163,5 +161,7 @@ def migrate_chat(old_chat_id, new_chat_id):
 
 
 # Create in memory userid to avoid disk access
+from tg_bot.modules.sql import create_tables as _create_tables
+_create_tables()
 __load_gbanned_userid_list()
 __load_gban_stat_list()

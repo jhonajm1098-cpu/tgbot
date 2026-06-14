@@ -17,7 +17,6 @@ class Rules(BASE):
         return "<Chat {} rules: {}>".format(self.chat_id, self.rules)
 
 
-Rules.__table__.create(checkfirst=True)
 
 INSERTION_LOCK = threading.RLock()
 

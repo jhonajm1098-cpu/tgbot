@@ -23,7 +23,6 @@ class BlackListFilters(BASE):
                     and self.trigger == other.trigger)
 
 
-BlackListFilters.__table__.create(checkfirst=True)
 
 BLACKLIST_FILTER_INSERTION_LOCK = threading.RLock()
 
@@ -104,4 +103,6 @@ def migrate_chat(old_chat_id, new_chat_id):
         SESSION.commit()
 
 
+from tg_bot.modules.sql import create_tables as _create_tables
+_create_tables()
 __load_chat_blacklists()

@@ -23,7 +23,6 @@ class RSS(BASE):
                                                                                    self.old_entry_link)
 
 
-RSS.__table__.create(checkfirst=True)
 INSERTION_LOCK = threading.RLock()
 
 

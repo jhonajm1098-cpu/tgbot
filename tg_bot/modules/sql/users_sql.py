@@ -1,6 +1,6 @@
 import threading
 
-from sqlalchemy import Column, Integer, UnicodeText, String, ForeignKey, UniqueConstraint, func
+from sqlalchemy import BigInteger, Column, Integer, UnicodeText, String, ForeignKey, UniqueConstraint, func
 
 from tg_bot import dispatcher
 from tg_bot.modules.sql import BASE, SESSION
@@ -8,7 +8,7 @@ from tg_bot.modules.sql import BASE, SESSION
 
 class Users(BASE):
     __tablename__ = "users"
-    user_id = Column(Integer, primary_key=True)
+    user_id = Column(BigInteger, primary_key=True)
     username = Column(UnicodeText)
 
     def __init__(self, user_id, username=None):
@@ -34,14 +34,14 @@ class Chats(BASE):
 
 class ChatMembers(BASE):
     __tablename__ = "chat_members"
-    priv_chat_id = Column(Integer, primary_key=True)
+    priv_chat_id = Column(BigInteger, primary_key=True)
     # NOTE: Use dual primary key instead of private primary key?
     chat = Column(String(14),
                   ForeignKey("chats.chat_id",
                              onupdate="CASCADE",
                              ondelete="CASCADE"),
                   nullable=False)
-    user = Column(Integer,
+    user = Column(BigInteger,
                   ForeignKey("users.user_id",
                              onupdate="CASCADE",
                              ondelete="CASCADE"),
@@ -57,9 +57,6 @@ class ChatMembers(BASE):
                                                             self.chat.chat_name, self.chat.chat_id)
 
 
-Users.__table__.create(checkfirst=True)
-Chats.__table__.create(checkfirst=True)
-ChatMembers.__table__.create(checkfirst=True)
 
 INSERTION_LOCK = threading.RLock()
 
@@ -169,6 +166,8 @@ def migrate_chat(old_chat_id, new_chat_id):
         SESSION.commit()
 
 
+from tg_bot.modules.sql import create_tables as _create_tables
+_create_tables()
 ensure_bot_in_db()
 
 

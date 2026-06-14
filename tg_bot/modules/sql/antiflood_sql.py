@@ -23,7 +23,6 @@ class FloodControl(BASE):
         return "<flood control for %s>" % self.chat_id
 
 
-FloodControl.__table__.create(checkfirst=True)
 
 INSERTION_LOCK = threading.RLock()
 
@@ -90,4 +89,6 @@ def __load_flood_settings():
         SESSION.close()
 
 
+from tg_bot.modules.sql import create_tables as _create_tables
+_create_tables()
 __load_flood_settings()

@@ -1,6 +1,6 @@
 import threading
 
-from sqlalchemy import Column, UnicodeText, Boolean, Integer
+from sqlalchemy import BigInteger, Column, UnicodeText, Boolean, Integer
 
 from tg_bot.modules.sql import BASE, SESSION
 
@@ -8,7 +8,7 @@ from tg_bot.modules.sql import BASE, SESSION
 class AFK(BASE):
     __tablename__ = "afk_users"
 
-    user_id = Column(Integer, primary_key=True)
+    user_id = Column(BigInteger, primary_key=True)
     is_afk = Column(Boolean)
     reason = Column(UnicodeText)
 
@@ -21,7 +21,6 @@ class AFK(BASE):
         return "afk_status for {}".format(self.user_id)
 
 
-AFK.__table__.create(checkfirst=True)
 INSERTION_LOCK = threading.RLock()
 
 AFK_USERS = {}
@@ -76,4 +75,6 @@ def __load_afk_users():
         SESSION.close()
 
 
+from tg_bot.modules.sql import create_tables as _create_tables
+_create_tables()
 __load_afk_users()

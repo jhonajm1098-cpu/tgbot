@@ -18,7 +18,6 @@ class Disable(BASE):
         return "Disabled cmd {} in {}".format(self.command, self.chat_id)
 
 
-Disable.__table__.create(checkfirst=True)
 DISABLE_INSERTION_LOCK = threading.RLock()
 
 DISABLED = {}
@@ -102,4 +101,6 @@ def __load_disabled_commands():
         SESSION.close()
 
 
+from tg_bot.modules.sql import create_tables as _create_tables
+_create_tables()
 __load_disabled_commands()

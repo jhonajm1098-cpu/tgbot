@@ -1,6 +1,6 @@
 import threading
 
-from sqlalchemy import Integer, Column, String, UnicodeText, func, distinct, Boolean
+from sqlalchemy import BigInteger, Integer, Column, String, UnicodeText, func, distinct, Boolean
 from sqlalchemy.dialects import postgresql
 
 from tg_bot.modules.sql import SESSION, BASE
@@ -9,7 +9,7 @@ from tg_bot.modules.sql import SESSION, BASE
 class Warns(BASE):
     __tablename__ = "warns"
 
-    user_id = Column(Integer, primary_key=True)
+    user_id = Column(BigInteger, primary_key=True)
     chat_id = Column(String(14), primary_key=True)
     num_warns = Column(Integer, default=0)
     reasons = Column(postgresql.ARRAY(UnicodeText))
@@ -59,9 +59,6 @@ class WarnSettings(BASE):
         return "<{} has {} possible warns.>".format(self.chat_id, self.warn_limit)
 
 
-Warns.__table__.create(checkfirst=True)
-WarnFilters.__table__.create(checkfirst=True)
-WarnSettings.__table__.create(checkfirst=True)
 
 WARN_INSERTION_LOCK = threading.RLock()
 WARN_FILTER_INSERTION_LOCK = threading.RLock()
@@ -283,4 +280,6 @@ def migrate_chat(old_chat_id, new_chat_id):
         SESSION.commit()
 
 
+from tg_bot.modules.sql import create_tables as _create_tables
+_create_tables()
 __load_chat_warn_filters()

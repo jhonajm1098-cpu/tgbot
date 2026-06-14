@@ -61,8 +61,6 @@ class Buttons(BASE):
         self.same_line = same_line
 
 
-CustomFilters.__table__.create(checkfirst=True)
-Buttons.__table__.create(checkfirst=True)
 
 CUST_FILT_LOCK = threading.RLock()
 BUTTON_LOCK = threading.RLock()
@@ -210,4 +208,6 @@ def migrate_chat(old_chat_id, new_chat_id):
             SESSION.commit()
 
 
+from tg_bot.modules.sql import create_tables as _create_tables
+_create_tables()
 __load_chat_filters()
